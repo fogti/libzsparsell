@@ -1,0 +1,28 @@
+# - Try to find ZSparsell
+# Once done, this will define
+#
+#  ZSparsell_FOUND - system has ZSparsell
+#  ZSparsell_INCLUDE_DIRS - the ZSparsell include directories
+#  ZSparsell_LIBRARIES - link these to use ZSparsell
+
+# Include dir
+find_path(ZSparsell_INCLUDE_DIR
+  NAMES escape.hpp MMAPguard.hpp
+  PATHS @INSTALL_INCLUDE_DIR@
+  PATH_SUFFIXES zs/parsell
+)
+
+# Finally the library itself
+find_library(ZSparsell_LIBRARY
+  NAMES zsparsell
+  PATHS @INSTALL_LIB_DIR@
+)
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(ZSparsell DEFAULT_MSG
+                                  ZSparsell_LIBRARY ZSparsell_INCLUDE_DIR)
+
+mark_as_advanced(ZSparsell_INCLUDE_DIR ZSparsell_LIBRARY)
+
+set(ZSparsell_INCLUDE_DIRS ${ZSparsell_INCLUDE_DIR})
+set(ZSparsell_LIBRARIES ${ZSparsell_LIBRARY})
