@@ -7,9 +7,7 @@
 
 #ifdef WITH_ZSIG
 # include "lowlevel/zsig.h"
-# ifndef WIN32
-#  include <signal.h>
-# endif
+# include <signal.h>
   void my_signal(const int sig_nr, const sighandler_t signalhandler) {
 # ifndef WIN32
   /* normal unix --
@@ -19,6 +17,9 @@
     sig.sa_flags   = SA_RESTART;
     sigemptyset(&sig.sa_mask);
     sigaction(sig_nr, &sig, 0);
+# else
+  /* win32 -- source: https://stackoverflow.com/questions/32389905/sigaction-and-porting-linux-code-to-windows */
+    signal(signr, signalhandler);
 # endif
   }
 #endif
