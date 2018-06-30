@@ -1,9 +1,9 @@
 // source: https://github.com/zserik/zxtw/src/escape.cxx
-#include "escape.hpp"
-
-using namespace std;
 
 namespace zsparsell {
+  char escape(char x) noexcept;
+  char unescape(char x) noexcept;
+
   char escape(const char x) noexcept {
     switch(x) {
       case '\a': return 'a';

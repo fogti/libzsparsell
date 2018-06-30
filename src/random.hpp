@@ -5,5 +5,5 @@
  **/
 #include <string>
 namespace zsparsell {
-  auto gen_random(const size_t length) -> std::string;
+  auto gen_random(size_t length) -> std::string;
 }

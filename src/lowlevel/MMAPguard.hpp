@@ -15,13 +15,13 @@ namespace zsparsell {
     MMAPguard(const MMAPguard &o) = delete;
     ~MMAPguard();
 
-    bool assign(const int fd, const size_t len) noexcept;
+    bool assign(int fd, size_t len) noexcept;
 
     auto get() const noexcept { return static_cast<const char*>(_addr); }
     auto size() const noexcept { return _len; }
     auto begin() const noexcept { return get(); }
     auto end() const noexcept { return get() + _len; }
 
-    void advise(const int adv) const noexcept;
+    void advise(int adv) const noexcept;
   };
 }
