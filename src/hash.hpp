@@ -10,7 +10,7 @@
 
 namespace zsparsell {
 
-  extern "C" void zsparsell_hash_combine(uintmax_t &seed, uintmax_t o) noexcept;
+  extern "C" void zsparsell_hash_combine(uintmax_t *seed, uintmax_t o) noexcept;
 
   template<class T>
   inline void hash_combine(uintmax_t& seed, const T& v) {
