@@ -1,8 +1,8 @@
-#pragma once
 /** zsparsell LexPos.hpp
     (C) 2018 Erik Zscheile
     License: MIT
  **/
+#pragma once
 #include <stddef.h>
 namespace zsparsell {
   // anything in namespace LexPos is a typedef

@@ -1,8 +1,8 @@
-#pragma once
 /** zsparsell Backtrack.hpp
     (C) 2018 Erik Zscheile
     License: MIT
  **/
+#pragma once
 #include "LexPos.hpp"
 namespace zsparsell {
   class Backtrack {
