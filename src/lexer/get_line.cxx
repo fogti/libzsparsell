@@ -49,7 +49,7 @@ auto lexer_get_line(const InputSlice &origin,
 
  contlnd:
   while(lnd != origin.end() && *lnd != '\n') ++lnd;
-  return InputSlice{line, 0, lst, lnd};
+  return InputSlice{line, lst, lnd};
 }
 
 }
