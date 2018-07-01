@@ -15,6 +15,6 @@ if(WITH_ZSIG)
   install(FILES lowlevel/zsig.h DESTINATION "${INSTALL_INCLUDE_DIR}")
 endif()
 
-install(FILES Backtrack.hpp escape/escape.hpp hash.hpp LexPos.hpp
+install(FILES Backtrack.hpp escape/escape.hpp hash.hpp InputSlice.hpp LexPos.hpp
               lowlevel/mman.h lowlevel/MMAPguard.hpp random.hpp reverse.hpp
         DESTINATION "${INSTALL_INCLUDE_DIR}")
