@@ -3,11 +3,4 @@
     License: MIT
  **/
 #pragma once
-#ifdef __cplusplus
-extern "C" {
-#endif
-  typedef void (*sighandler_t)(int);
-  void my_signal(int sig_nr, sighandler_t signalhandler);
-#ifdef __cplusplus
-}
-#endif
+#include <zs/ll/zsig.h>

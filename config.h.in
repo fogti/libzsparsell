@@ -1,5 +1,0 @@
-#pragma once
-#ifndef WIN32
-#cmakedefine WIN32
-#endif
-#cmakedefine WITH_ZSIG
