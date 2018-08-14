@@ -3,7 +3,7 @@ project(zsparsell)
 
 set(INSTALL_LIB_DIR     lib${LIB_SUFFIX}   CACHE PATH "Installation directory for libraries")
 set(INSTALL_INCLUDE_DIR include/zs/parsell CACHE PATH "Installation directory for header files")
-set(INSTALL_CMAKE_DIR  share/cmake/Modules CACHE PATH "Installation directory for CMake module files")
+set(INSTALL_CMAKE_DIR ${INSTALL_LIB_DIR}/cmake/ZSparsell CACHE PATH "Installation directory for CMake module files")
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

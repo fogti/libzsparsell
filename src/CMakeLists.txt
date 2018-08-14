@@ -9,7 +9,8 @@ set_source_files_properties(escape/cstr.cxx escape/char.cxx lexer/get_line.cxx
   PROPERTIES COMPILE_FLAGS "-fno-exceptions -fno-unwind-tables")
 
 # === INSTALL SECTION ===
-install(TARGETS zsparsell DESTINATION "${INSTALL_LIB_DIR}")
+install(TARGETS zsparsell DESTINATION "${INSTALL_LIB_DIR}" EXPORT ZSparsellTargets)
+install(EXPORT ZSparsellTargets DESTINATION "${INSTALL_CMAKE_DIR}" NAMESPACE ZSparsell:: COMPONENT dev)
 
 install(FILES escape/escape.hpp hash.hpp
     lexer/Backtrack.hpp lexer/InputSlice.hpp lexer/LexPos.hpp lexer/lexer_get_line.hpp
