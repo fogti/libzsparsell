@@ -30,8 +30,7 @@ namespace zsparsell {
     for(const char *i = s; *i; ++i) {
       char tmp = *i;
       if(*i == '\\') {
-        ++i;
-        if(!*i) break;
+        if(!*(++i)) break;
         tmp = unescape(*i);
       }
       ret[pos++] = tmp;

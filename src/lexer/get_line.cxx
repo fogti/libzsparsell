@@ -16,10 +16,8 @@ auto lexer_get_line(const InputSlice &origin,
   if(line == origin.line()) {
     lnd = lst = _pos;
 
-    if(_pos == origin.begin()) {
-      // done with search for lst
+    if(_pos == origin.begin()) // done with search for lst
       goto contlnd;
-    }
 
     /* handle the case _pos -> '\n'
      *  if _pos -> '\n' -> EOL, go 1 backwards
