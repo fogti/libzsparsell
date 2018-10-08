@@ -28,6 +28,10 @@ namespace zsparsell {
     bool read_qstring(std::string &str);
     void read_number(uintmax_t &ival) noexcept;
 
+    enum number_type_t { LNT_INT, LNT_FLT };
+    auto read_number_generic(uintmax_t &ival, double &fval) noexcept
+      -> number_type_t;
+
     // read double after dot
     bool fladot_follows() const noexcept;
     void read_fladot(double &fval) noexcept;
