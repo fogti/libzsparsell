@@ -52,6 +52,11 @@ namespace zsparsell {
     return true;
   }
 
+  bool Lexer::fladot_follows() const noexcept {
+    const char *nxtpos = _pos + 1;
+    return !eof() && *_pos == '.' && _end != nxtpos && isdigit(*nxtpos);
+  }
+
   void Lexer::read_fladot(double &fval) noexcept {
     // we are here directly after the dot ('.' . ...)
     size_t part = 10;
@@ -86,6 +91,18 @@ namespace zsparsell {
         incr();
       }
     }
+  }
+
+  bool Lexer::read_classified(string &str, const function<uint8_t (char)> clfn) {
+    LexPos::bound spos = _pos;
+    const auto lcc = clfn(*_pos);
+
+    incr();
+    if(lcc)
+      while(!eof() && lcc == clfn(*_pos))
+        incr();
+    str.assign(spos, _pos);
+    return lcc;
   }
 
   auto Lexer::get_line(const size_t line) const noexcept -> InputSlice {

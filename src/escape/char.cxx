@@ -4,9 +4,6 @@ namespace zsparsell {
   char escape(char x) noexcept;
   char unescape(char x) noexcept;
 
-# ifdef CRT
-#  undef CRT
-# endif
 # define CRT(F,T) case F: return T;
   char escape(const char x) noexcept {
     switch(x) {

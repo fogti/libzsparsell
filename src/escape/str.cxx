@@ -27,13 +27,15 @@ namespace zsparsell {
 
     bool is_esc = false;
     for(const auto i : s) {
-      if(const char tmp = ([&] {
-        is_esc = !is_esc;
-        if(!is_esc)   return unescape(i);
+      const char tmp = ([&] {
+        if(is_esc) {
+          is_esc = !is_esc;
+          return unescape(i);
+        }
         if(i == '\\') return '\0';
-        is_esc = !is_esc;
         return i;
-      })())
+      })();
+      if(tmp)
         ret += tmp;
     }
 

@@ -15,11 +15,6 @@ namespace zsparsell {
     InputSlice(const LexPos::lineno line, LexPos::bound begos, LexPos::bound endos)
       : _line(line), _begin(begos), _end(endos) { }
 
-    // this constructor is only here for backward compatibility
-    InputSlice(const LexPos::lineno line, const LexPos::columno col,
-      LexPos::bound begos, LexPos::bound endos)
-      : _line(line), _begin(begos), _end(endos) { }
-
     auto to_string() const { return std::string(_begin, _end); }
 
     size_t size() const noexcept { return _end - _begin;  }

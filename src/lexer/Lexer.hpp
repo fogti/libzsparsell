@@ -4,6 +4,8 @@
  **/
 #pragma once
 #include "InputSlice.hpp"
+#include <inttypes.h>
+#include <functional>
 namespace zsparsell {
   class Lexer {
    protected:
@@ -27,7 +29,12 @@ namespace zsparsell {
     void read_number(uintmax_t &ival) noexcept;
 
     // read double after dot
+    bool fladot_follows() const noexcept;
     void read_fladot(double &fval) noexcept;
+
+    // read word based on clssification
+    // no classification: clfn(..) == 0
+    bool read_classified(std::string &str, std::function<uint8_t (char)> clfn);
 
    public:
     Lexer(const char * const filename, LexPos::bound begf,
