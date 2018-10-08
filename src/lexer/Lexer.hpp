@@ -8,6 +8,8 @@
 #include <functional>
 namespace zsparsell {
   class Lexer {
+    bool _read_qch_single(char &c) noexcept;
+
    protected:
     const char * const _filename;
     LexPos::lineno  _lineno;
@@ -26,6 +28,7 @@ namespace zsparsell {
 
     // read functions
     bool read_qstring(std::string &str);
+    bool read_qchar(std::string &str);
     void read_number(uintmax_t &ival) noexcept;
 
     enum number_type_t { LNT_INT, LNT_FLT };

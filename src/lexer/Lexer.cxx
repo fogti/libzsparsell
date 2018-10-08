@@ -28,6 +28,17 @@ namespace zsparsell {
     while(!eof() && *_pos != what) incr();
   }
 
+  bool Lexer::_read_qch_single(char &c) noexcept {
+    c = *_pos;
+    if(c == '\\') {
+      incr();
+      if(eof()) return false;
+      c = unescape(*_pos);
+    }
+    incr();
+    return true;
+  }
+
   bool Lexer::read_qstring(string &str) {
     // we are only here if we got '"'
     incr();
@@ -36,20 +47,27 @@ namespace zsparsell {
     str.clear();
 
     while(!eof() && *_pos != '"') {
-      if(*_pos == '\\') {
-        incr();
-        if(eof()) return false;
-        str += unescape(*_pos);
-      } else {
-        str += *_pos;
-      }
-      incr();
+      char tmp;
+      if(_read_qch_single(tmp))
+        str += tmp;
+      else
+        return false;
     }
 
     // (. '"') -> ('"' .)
     if(!eof()) incr();
     // we are now at the first non-quoted-string character
     return true;
+  }
+
+  bool Lexer::read_qchar(string &str) {
+    // we are only here if we got '\'' --> quoted character
+    incr();
+    if(eof()) return false;
+    char tmp;
+    const bool ret = _read_qch_single(tmp);
+    str = { tmp };
+    return ret;
   }
 
   auto Lexer::read_number_generic(uintmax_t &ival, double &fval) noexcept
