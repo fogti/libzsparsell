@@ -32,10 +32,6 @@ namespace zsparsell {
     auto read_number_generic(uintmax_t &ival, double &fval) noexcept
       -> number_type_t;
 
-    // read double after dot
-    bool fladot_follows() const noexcept;
-    void read_fladot(double &fval) noexcept;
-
     // read word based on clssification
     // no classification: clfn(..) == 0
     bool read_classified(std::string &str, std::function<uint8_t (char)> clfn);

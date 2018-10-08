@@ -52,31 +52,28 @@ namespace zsparsell {
     return true;
   }
 
-  bool Lexer::fladot_follows() const noexcept {
-    const char *nxtpos = _pos + 1;
-    return !eof() && *_pos == '.' && _end != nxtpos && isdigit(*nxtpos);
-  }
+  auto Lexer::read_number_generic(uintmax_t &ival, double &fval) noexcept
+     -> number_type_t {
+    read_number(ival);
 
-  void Lexer::read_fladot(double &fval) noexcept {
-    // we are here directly after the dot ('.' . ...)
+    {
+      const char *nxtpos = _pos + 1;
+      if(eof() || !(*_pos == '.' && _end != nxtpos && isdigit(*nxtpos)))
+        return LNT_INT;
+    }
+
+    // float parsing
+    incr();
+    fval = ival;
     size_t part = 10;
+
+    // we are here directly after the dot ('.' . ...)
     do {
       fval += (*_pos - '0') / part;
       part *= 10;
       incr();
     } while(!eof() && isdigit(*_pos));
-  }
 
-  auto Lexer::read_number_generic(uintmax_t &ival, double &fval) noexcept
-     -> number_type_t {
-    read_number(ival);
-    if(!fladot_follows())
-      return LNT_INT;
-
-    // float
-    incr();
-    fval = ival;
-    read_fladot(fval);
     return LNT_FLT;
   }
 
