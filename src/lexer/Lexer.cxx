@@ -6,6 +6,7 @@
 #include <escape/escape.hpp>
 #include "hexcode.hpp"
 #include "lexer_get_line.hpp"
+#include <stdio.h>
 
 using namespace std;
 
@@ -172,10 +173,44 @@ namespace zsparsell {
     return lexer_get_line({_lineno, _begin, _end}, line, _pos);
   }
 
-#pragma GCC diagnostic ignored "-Wpedantic"
+  // function which repeats char x times
+  static inline void repchxt(FILE * const stream, const char c, const size_t n) noexcept {
+    for(size_t i = 0; i < n; ++i) fputc(c, stream);
+  }
+
+  void Lexer::print_locmsg(const std::map<uint32_t, uint16_t> &colors, const LexerToken &token, const std::string &msg) const {
+    fprintf(stderr, "line %zu: %s\n% 6zu │ ", token.line, msg.c_str(), token.line);
+
+    const auto lslc = get_line(token.line);
+    if(lslc.size() > token.col) {
+      // 1. line start to mark start
+      fwrite(lslc.begin(), token.col, 1, stderr);
+      // 2. marked area
+      const uint16_t color = colors.lower_bound(token.type)->second;
+      // color : '0' - 1 = '/'
+      if(color >> 8) fprintf(stderr, "\033[4%cm", (color >> 8) + '/');
+      fprintf(stderr, "\033[%.2um\033[1m", static_cast<uint32_t>(color & 0xff));
+      fwrite(lslc.begin() + token.col, token.cspan, 1, stderr);
+      fputs("\033[0m", stderr);
+      const size_t awp = token.col + token.cspan;
+      if(lslc.size() > awp)
+        fwrite(lslc.begin() + awp, lslc.size() - awp, 1, stderr);
+    } else {
+      fwrite(lslc.begin(), lslc.size(), 1, stderr);
+    }
+
+    // print position (for viewers without color display)
+    fprintf(stderr, "\n...... │ ");
+    repchxt(stderr, ' ', token.col);
+    repchxt(stderr, '~', token.cspan);
+    fputc('\n', stderr);
+  }
+
   static int zs_is_octnum(const int c) noexcept {
     return '0' <= c && c < '8';
   }
+
+#pragma GCC diagnostic ignored "-Wpedantic"
 
   void Lexer::read_number(uintmax_t &ival) noexcept {
     enum detail_numtype_t { LDNT_INT, LDNT_HEX, LDNT_OCT } use_format = LDNT_INT;
@@ -278,5 +313,4 @@ namespace zsparsell {
     ret.cspan = _pos - spos;
     return ret;
   }
-
 }

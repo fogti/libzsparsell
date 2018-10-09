@@ -1,7 +1,7 @@
 add_library(zsparsell SHARED escape/char.cxx escape/cstr.cxx escape/str.cxx
                              lexer/get_line.cxx lexer/hexcode.cxx lexer/Lexer.cxx random.cxx)
 
-set_target_properties (zsparsell PROPERTIES VERSION "2.0.0" SOVERSION 2)
+set_target_properties (zsparsell PROPERTIES VERSION "3.0.0" SOVERSION 3)
 target_compile_options(zsparsell PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-fno-rtti>)
 target_link_libraries (zsparsell LowlevelZS::lowlevelzs)
 

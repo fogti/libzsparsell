@@ -6,6 +6,7 @@
 #include "InputSlice.hpp"
 #include <inttypes.h>
 #include <functional>
+#include <map>
 #include <unordered_map>
 
 // Lexer Token Types
@@ -73,6 +74,9 @@ namespace zsparsell {
     //  0 : no classification (type = LT_UKN)
     //  1 : single-char split (type = *_pos)
     bool read_classified(std::string &str, const std::function<uint8_t (char)> &clfn);
+
+    // print a message with position information
+    void print_locmsg(const std::map<uint32_t, uint16_t> &colors, const LexerToken &token, const std::string &msg) const;
 
     // a parameterized get_next function
     auto param_get_next(const std::unordered_map<std::string, uint32_t> &keywords, const std::function<uint8_t (char)> &clfn)
