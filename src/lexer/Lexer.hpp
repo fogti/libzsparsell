@@ -94,6 +94,14 @@ namespace zsparsell {
      */
     auto get_line(size_t lineno) const noexcept -> InputSlice;
 
+    /* errmsg prints an error message and the formatted position,
+     *  based on a given token
+     *
+     * @param token used as position marker
+     * @param msg   an error description
+     */
+    virtual void errmsg(const LexerToken &token, const std::string &msg) const noexcept = 0;
+
     virtual auto get_next() -> LexerToken = 0;
   };
 }

@@ -8,7 +8,7 @@ set(INSTALL_CMAKE_DIR ${INSTALL_LIB_DIR}/cmake/ZSparsell CACHE PATH "Installatio
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories("${PROJECT_SOURCE_DIR}/src")
+include_directories("${PROJECT_SOURCE_DIR}/src" "${PROJECT_SOURCE_DIR}/src/lexer")
 
 find_package(LowlevelZS REQUIRED)
 
