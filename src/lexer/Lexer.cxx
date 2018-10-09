@@ -24,6 +24,67 @@ namespace zsparsell {
     ++_pos;
   }
 
+  void Lexer::skip_multiline_cmt() noexcept {
+    // skip multiline comment
+    // . '/' '*'
+    incr();
+    incr();
+    // '/' '*' .
+    size_t cmtlvl = 1;
+    while(!eof() && cmtlvl) {
+      const char curc = *_pos;
+      incr();
+      switch(*_pos) {
+        case '/':
+          if(!eof() && *_pos == '*') {
+            // recursive cmt
+            cmtlvl++;
+          }
+          break;
+
+        case '*':
+          if(!eof() && *_pos == '/') {
+            // end of recursive cmt
+            cmtlvl--;
+          }
+          break;
+
+        default: break;
+      }
+    }
+  }
+
+  void Lexer::skip_spaces() noexcept {
+    LexPos::single old_pos;
+    do {
+      old_pos = _pos;
+      while(!eof() && isspace(*_pos)) incr();
+      const char *const nxtpos = _pos + 1;
+      if(eof() || nxtpos == _end) break;
+
+      // skip comments
+      bool cmt = false;
+      const char nxt = *nxtpos;
+      switch(*_pos) {
+        case '#':
+          if(nxt == '!') cmt = true;
+          break;
+        case '/':
+          switch(nxt) {
+            case '/':
+              cmt = true;
+              break;
+            case '*':
+              skip_multiline_cmt();
+              break;
+            default: break;
+          }
+          break;
+      }
+      if(cmt) skip_to('\n');
+    } while(old_pos != _pos);
+  }
+
   void Lexer::skip_to(const char what) noexcept {
     while(!eof() && *_pos != what) incr();
   }
@@ -95,12 +156,12 @@ namespace zsparsell {
     return LNT_FLT;
   }
 
-  bool Lexer::read_classified(string &str, const function<uint8_t (char)> clfn) {
+  bool Lexer::read_classified(string &str, const function<uint8_t (char)> &clfn) {
     LexPos::bound spos = _pos;
     const auto lcc = clfn(*_pos);
 
     incr();
-    if(lcc)
+    if(lcc > 1)
       while(!eof() && lcc == clfn(*_pos))
         incr();
     str.assign(spos, _pos);
@@ -160,4 +221,62 @@ namespace zsparsell {
       break;
     }
   }
+
+  auto Lexer::param_get_next(const unordered_map<string, uint32_t> &keywords, const std::function<uint8_t (char)> &clfn)
+      -> LexerToken {
+    LexerToken ret;
+    skip_spaces();
+    ret.line   = _lineno;
+    ret.col    = _column;
+    ret.val_bp = _pos;
+    if(eof()) {
+      ret.type = LT_EOF;
+      return ret;
+    }
+
+    LexPos::bound spos = _pos;
+
+    switch(static_cast<uint8_t>(*_pos)) {
+      case '"':
+        // quoted string
+        ret.type = LT_STR;
+        read_qstring(ret.val_s);
+        break;
+
+      case '\'':
+        // quoted char
+        ret.type = LT_STR;
+        read_qchar(ret.val_s);
+        break;
+
+      case '0' ... '9':
+        // number
+        switch(read_number_generic(ret.val_i, ret.val_f)) {
+          case LNT_INT:
+            ret.type = LT_INT;
+            break;
+          case LNT_FLT:
+            ret.type = LT_FLT;
+            break;
+        }
+        break;
+
+      default:
+        ret.type = ([&, this]() -> uint32_t {
+          if(!read_classified(ret.val_s, clfn))
+            return LT_UKN;
+          const auto it = keywords.find(ret.val_s);
+          if(it != keywords.end())
+            return it->second;
+          else if(ret.val_s.size() == 1 && !isalnum(ret.val_s.front()))
+            return ret.val_s.front();
+          else
+            return LT_ID;
+        })();
+    }
+
+    ret.cspan = _pos - spos;
+    return ret;
+  }
+
 }
