@@ -1,11 +1,12 @@
-add_library(zsparsell SHARED escape/char.cxx escape/cstr.cxx escape/str.cxx random.cxx
-                             lexer/get_line.cxx lexer/hexcode.cxx lexer/Lexer.cxx parser/Parser.cxx)
+add_library(zsparsell SHARED escape/char.cxx escape/cstr.cxx escape/str.cxx
+                             lexer/get_line.cxx lexer/hexcode.cxx lexer/Lexer.cxx lexer/ldbg.cxx
+                             parser/Parser.cxx random.cxx)
 
 set_target_properties (zsparsell PROPERTIES VERSION "3.0.0" SOVERSION 3)
 target_compile_options(zsparsell PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-fno-rtti>)
 target_link_libraries (zsparsell LowlevelZS::lowlevelzs)
 
-set_source_files_properties(escape/cstr.cxx escape/char.cxx lexer/get_line.cxx
+set_source_files_properties(escape/cstr.cxx escape/char.cxx lexer/get_line.cxx lexer/hexcode.cxx
   PROPERTIES COMPILE_FLAGS "-fno-exceptions -fno-unwind-tables")
 
 # === INSTALL SECTION ===

@@ -102,6 +102,13 @@ namespace zsparsell {
      */
     virtual void errmsg(const LexerToken &token, const std::string &msg) const noexcept = 0;
 
+    /* lexer test / debugging
+       NOTE: all input is consumed inside these functions
+     */
+    void lexdbg();
+    void lerrdbg();
+
+    // main function
     virtual auto get_next() -> LexerToken = 0;
   };
 }
